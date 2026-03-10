@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database.db import init_db
-from routers import auth_router, quiz_router, ai_router, student_router, revision_router
+from fastapi.responses import JSONResponse
+import os
 
 app = FastAPI(
     title="BankEnglish AI — Backend API",
@@ -18,7 +18,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include all routers
+# ── Health check MUST be registered before anything else ──
+@app.get("/health")
+def health():
+    return JSONResponse(content={"status": "healthy"}, status_code=200)
+
+@app.get("/")
+def root():
+    return JSONResponse(content={
+        "app": "BankEnglish AI",
+        "status": "running",
+        "version": "1.0.0",
+        "docs": "/docs",
+    }, status_code=200)
+
+# ── Load routers and database AFTER health check ──
+from database.db import init_db
+from routers import auth_router, quiz_router, ai_router, student_router, revision_router
+
 app.include_router(auth_router.router)
 app.include_router(quiz_router.router)
 app.include_router(ai_router.router)
@@ -27,18 +44,9 @@ app.include_router(revision_router.router)
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    try:
+        init_db()
+        print("✅ Database tables created")
+    except Exception as e:
+        print(f"⚠️ Database init error: {e}")
     print("✅ BankEnglish AI backend started")
-
-@app.get("/")
-def root():
-    return {
-        "app": "BankEnglish AI",
-        "status": "running",
-        "version": "1.0.0",
-        "docs": "/docs",
-    }
-
-@app.get("/health")
-def health():
-    return {"status": "healthy"}
