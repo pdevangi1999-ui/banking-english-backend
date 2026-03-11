@@ -41,7 +41,7 @@ Requirements:
 Start teaching directly without any introduction like "Sure!" or "Of course!"."""
 
     response = client.models.generate_content(
-        model="gemini-3-flash-preview",
+        model="gemini-2.0-flash",
         contents=prompt
     )
     return response.text
@@ -74,7 +74,7 @@ Rules:
 - Return ONLY the JSON array"""
 
     response = client.models.generate_content(
-        model="gemini-3-flash-preview",
+        model="gemini-2.0-flash",
         contents=prompt
     )
     text = clean_json(response.text)
@@ -111,7 +111,7 @@ Return ONLY a JSON array:
 Return ONLY the JSON array, nothing else."""
 
     response = client.models.generate_content(
-        model="gemini-3-flash-preview",
+        model="gemini-2.0-flash",
         contents=prompt
     )
     text = clean_json(response.text)
