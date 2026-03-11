@@ -1,0 +1,43 @@
+﻿*** Begin Patch
+*** Update File: database/models.py
+@@
+-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Date, Text, JSON, ForeignKey
++from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Date, Text, JSON, ForeignKey
+@@
+ class LearningProgress(Base):
+@@
+     last_updated    = Column(Date, default=date.today, nullable=False)  # ✅ Date not date
++
++
++class LearningHistory(Base):
++    __tablename__ = "learning_history"
++
++    id              = Column(Integer, primary_key=True, index=True)
++    user_id         = Column(Integer, index=True, nullable=False)
++    day             = Column(Integer, nullable=False)
++    date            = Column(Date, default=date.today, nullable=False)
++    type            = Column(String(50), default="word")
++    batch_completed = Column(Boolean, default=False, nullable=False)
++    quiz_completed  = Column(Boolean, default=False, nullable=False)
++    items_done      = Column(Integer, default=0)
++    total_items     = Column(Integer, default=0)
++    completed_at    = Column(DateTime(timezone=True), server_default=func.now())
+@@
+ class User(Base):
+@@
+     updated_at               = Column(DateTime(timezone=True), onupdate=func.now())
++
++
++class ContentItem(Base):
++    __tablename__ = "content_items"
++
++    id          = Column(Integer, primary_key=True, index=True)
++    concept_id  = Column(String(255), index=True, nullable=False)
++    title       = Column(String(255), nullable=False)
++    definition  = Column(Text, default="")
++    type        = Column(String(50), default="word")  # word / vocab / grammar
++    day         = Column(Integer, nullable=False)
++    item_order  = Column(Integer, default=0)
++    metadata    = Column(JSON, default={})
++    created_at  = Column(DateTime(timezone=True), server_default=func.now())
+*** End Patch
