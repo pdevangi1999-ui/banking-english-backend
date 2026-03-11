@@ -53,7 +53,7 @@ class ContentItem(Base):
     type        = Column(String(50), default="word")  # word / vocab / grammar
     day         = Column(Integer, nullable=False)
     item_order  = Column(Integer, default=0)
-    metadata    = Column(JSON, default={})
+    extra_data  = Column(JSON, default={})
     created_at  = Column(DateTime(timezone=True), server_default=func.now())
 
 
