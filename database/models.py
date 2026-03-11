@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, JSON
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, JSON, ForeignKey
 from sqlalchemy.sql import func
 from database.db import Base
 from datetime import date
@@ -11,9 +11,9 @@ class LearningProgress(Base):
     current_batch   = Column(Integer, default=1, nullable=False)
     batch_completed = Column(Boolean, default=False, nullable=False)
     quiz_completed  = Column(Boolean, default=False, nullable=False)
-    last_updated    = Column(Date, default=date.today, nullable=False)
+    last_updated    = Column(date, default=date.today, nullable=False)
 
-    
+
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)

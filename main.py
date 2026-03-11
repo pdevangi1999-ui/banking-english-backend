@@ -35,7 +35,8 @@ def root():
 # ── Load routers and database AFTER health check ──
 from database.db import init_db
 from routers import auth_router, quiz_router, ai_router, student_router, revision_router
-
+from routers import learning_router         
+app.include_router(learning_router.router)
 app.include_router(auth_router.router)
 app.include_router(quiz_router.router)
 app.include_router(ai_router.router)
